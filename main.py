@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import time
+import os
 
 esa_titles_list = []
 esa_data_article_list = []
@@ -8,6 +9,8 @@ esa_data_title = ''
 
 def get_esa_site_informations():
     global esa_data_title
+    global esa_titles_list 
+    global esa_data_article_list
     esa_site = requests.get('https://www.esa.int/Space_in_Member_States/Italy').text
     soup = BeautifulSoup(esa_site, 'lxml')
     esa_posts = soup.find_all('span', class_='ll_440579')
@@ -24,13 +27,14 @@ def get_esa_site_informations():
     esa_data_title = esa_data_title_tag.text 
 
     esa_data_contents = esa_data_soup.find_all('p')
-    with open('esa_data_all_articles.txt', 'a') as f_writer:  # Open the file in append mode
+    folder_path = 'esa_post_articles'  # Specify the folder path
+    os.makedirs(folder_path, exist_ok=True)  # Create the folder if it doesn't exist
+
+    with open(os.path.join(folder_path, 'esa_data_article_list.txt'), 'a') as f_writer:
         for esa_data_content in esa_data_contents:
             esa_data_article = esa_data_content.text
-            # print(esa_data_article)
             esa_data_article_list.append(esa_data_article)
-            f_writer.write(esa_data_article + '\n')  # Append the content to the file
-
+            f_writer.write(esa_data_article + '\n')
 
 if __name__ == '__main__':
     while True:
