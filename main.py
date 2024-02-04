@@ -9,8 +9,6 @@ esa_data_title = ''
 
 def get_esa_site_informations():
     global esa_data_title
-    global esa_titles_list 
-    global esa_data_article_list
     esa_site = requests.get('https://www.esa.int/Space_in_Member_States/Italy').text
     soup = BeautifulSoup(esa_site, 'lxml')
     esa_posts = soup.find_all('span', class_='ll_440579')
@@ -39,5 +37,4 @@ def get_esa_site_informations():
 if __name__ == '__main__':
     while True:
         get_esa_site_informations()
-        print(esa_data_title)
         time.sleep(100)
