@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 import time
 import os
+from datetime import datetime, timedelta
 
 esa_titles_list = []
 esa_data_article_list = []
@@ -36,5 +37,10 @@ def get_esa_site_informations():
 
 if __name__ == '__main__':
     while True:
-        get_esa_site_informations()
-        time.sleep(100)
+        if datetime.today().weekday() == 0:  # Monday is represented by 0
+            get_esa_site_informations()
+        # Calculate time until next Monday
+        next_monday = (datetime.today() + timedelta(days=(7 - datetime.today().weekday())))
+        # Calculate the number of seconds until next Monday
+        sleep_time = (next_monday - datetime.today()).total_seconds()
+        time.sleep(sleep_time)
